@@ -1,5 +1,6 @@
 import pandas as pd
 import operator
+import sys
 
 ops = {
         '+' : operator.add,
@@ -10,6 +11,10 @@ ops = {
         '^' : operator.xor,
         '**': operator.pow
         }
+
+
+def evaluate(x):
+    return getattr(sys.modules[__name__],x)
 
 def dict(index_list, A_list, B_list, C_list):
     d = {
@@ -24,7 +29,7 @@ def entry(input):
     input_list = [input_list[0][0], int(input_list[0][1:]) - 1, input_list[1]]
     #print input_list
 
-    eval(input_list[0])[input_list[1]] = int(input_list[2])
+    evaluate(input_list[0])[input_list[1]] = int(input_list[2])
 
     d = dict(indexes, A, B, C)
     df = pd.DataFrame(d)
@@ -37,7 +42,7 @@ def set_expression(input):
     input_list = [input_list[0][0], int(input_list[0][1:]) - 1, input_list[1], input_list[2][0], int(input_list[2][1:]) - 1, input_list[3], input_list[4][0], int(input_list[4][1:]) - 1]
     #print input_list
 
-    eval(input_list[6])[input_list[7]] = ops[input_list[2]](int(eval(input_list[0])[input_list[1]]),int(eval(input_list[3])[input_list[4]]))
+    evaluate(input_list[6])[input_list[7]] = ops[input_list[2]](int(evaluate(input_list[0])[input_list[1]]),int(evaluate(input_list[3])[input_list[4]]))
 
     d = dict(indexes, A, B, C)
     df = pd.DataFrame(d)#, index=[1, 2, 3], columns=['A', 'B', 'C'])
